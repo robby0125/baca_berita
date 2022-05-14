@@ -1,8 +1,16 @@
+import 'package:baca_berita/domain/entities/article.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
 class ArticleItemCard extends StatelessWidget {
-  const ArticleItemCard({Key? key}) : super(key: key);
+  final Article article;
+
+  const ArticleItemCard({
+    Key? key,
+    required this.article,
+  }) : super(key: key);
+
+  final double _imgSize = 88;
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +28,19 @@ class ArticleItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Article Title',
+                      article.title ?? 'No Title',
                       style: Get.textTheme.headline6,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const Spacer(),
                     Text(
-                      'Author Name',
+                      article.author ?? 'No Author',
                       style: Get.textTheme.caption!.copyWith(
                         color: Colors.redAccent,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       '15 OCT 2022',
@@ -39,9 +51,23 @@ class ArticleItemCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                width: 88,
-                color: Colors.grey,
+              const SizedBox(width: 8),
+              Image.network(
+                article.urlToImage ?? '',
+                width: _imgSize,
+                height: _imgSize,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) {
+                  return Container(
+                    width: _imgSize,
+                    height: _imgSize,
+                    color: Colors.grey[200],
+                    child: Icon(
+                      Icons.error,
+                      color: Colors.red,
+                    ),
+                  );
+                },
               ),
             ],
           ),
